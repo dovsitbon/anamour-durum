@@ -1,0 +1,133 @@
+{
+  "_note": "Carte d'Anamour Durum. Remplacer chaque \"prix\": null par le prix affiché en salle (ex. \"9,50 €\"). Laisser null affiche [À CONFIRMER]. \"detail\" : null = composition à confirmer.",
+  "rubriques": [
+    {
+      "id": "durum",
+      "titre": "Dürüm",
+      "sous": "La galette roulée serrée, à emporter ou à table.",
+      "plats": [
+        {
+          "nom": "Dürüm",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "kebab",
+      "titre": "Kebab / grec",
+      "sous": "La viande tranchée à la broche. Le grec, tendre et bien assaisonné, d'après nos clients.",
+      "plats": [
+        {
+          "nom": "Kebab",
+          "detail": null,
+          "prix": null
+        },
+        {
+          "nom": "Grec",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "assiettes",
+      "titre": "Assiettes",
+      "sous": "Servies à table, bien garnies.",
+      "plats": [
+        {
+          "nom": "Assiette kebab",
+          "detail": null,
+          "prix": null
+        },
+        {
+          "nom": "Assiette grillades",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "grillades",
+      "titre": "Grillades",
+      "sous": "Le grill, ce que les clients citent en premier. Les mix se composent à la borne.",
+      "plats": [
+        {
+          "nom": "Anamour sofrasi",
+          "detail": "Kebab, köfte, poulet, agneau, côtelettes",
+          "prix": "23 €",
+          "prixAConfirmer": true,
+          "phare": true
+        },
+        {
+          "nom": "Mix grillades",
+          "detail": "Composition au choix à la borne",
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "lahmacun",
+      "titre": "Lahmacun",
+      "sous": "La « pizza turque ». Celle que les avis citent en premier.",
+      "plats": [
+        {
+          "nom": "Lahmacun",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "sauces",
+      "titre": "Sauces",
+      "sous": "Dont la sauce cheddar maison.",
+      "plats": [
+        {
+          "nom": "Sauce cheddar maison",
+          "detail": null,
+          "prix": null
+        },
+        {
+          "nom": "Autres sauces",
+          "detail": "Liste à confirmer",
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "accompagnements",
+      "titre": "Accompagnements",
+      "sous": "Les pommes de terre maison : croustillantes dehors, fondantes dedans.",
+      "plats": [
+        {
+          "nom": "Pommes de terre maison",
+          "detail": null,
+          "prix": null
+        },
+        {
+          "nom": "Blé",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    },
+    {
+      "id": "boissons",
+      "titre": "Boissons",
+      "sous": "Et le thé turc, offert à table.",
+      "plats": [
+        {
+          "nom": "Çay, thé turc",
+          "detail": "Offert à table",
+          "prix": "Offert"
+        },
+        {
+          "nom": "Boissons fraîches",
+          "detail": null,
+          "prix": null
+        }
+      ]
+    }
+  ]
+}

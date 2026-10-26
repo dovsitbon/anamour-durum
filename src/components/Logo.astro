@@ -1,0 +1,9 @@
+---
+import Cay from './Cay.astro';
+interface Props { class?: string; id?: string }
+const { class: cls = '', id = 'logo' } = Astro.props;
+---
+<a href="/" class={`inline-flex items-center gap-2 no-underline min-h-11 ${cls}`} aria-label="Anamour Durum, retour à l'accueil">
+  <Cay class="w-8 h-10 -mt-1" vapeur={false} id={id} />
+  <span class="font-enseigne uppercase leading-[.86] text-[1.15rem] tracking-tight">Anamour<br /><span class="text-ambre">Durum</span></span>
+</a>

@@ -1,0 +1,35 @@
+---
+// Verre de çay tulipe : élément de marque. Dessin original.
+interface Props { class?: string; vapeur?: boolean; titre?: string; id?: string }
+const { class: cls = '', vapeur = true, titre, id = 'cay' } = Astro.props;
+const verre = 'M64 46C66 92 84 106 84 130C84 152 70 166 71 188C72 205 84 214 100 214C116 214 128 205 129 188C130 166 116 152 116 130C116 106 134 92 136 46Z';
+---
+<svg class={cls} viewBox="0 0 200 250" role={titre ? 'img' : undefined} aria-hidden={titre ? undefined : 'true'} aria-label={titre}>
+  <defs>
+    <clipPath id={`${id}-v`}><path d={verre} /></clipPath>
+    <linearGradient id={`${id}-t`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8a83e" />
+      <stop offset=".55" stop-color="#b65a17" />
+      <stop offset="1" stop-color="#7a2a0c" />
+    </linearGradient>
+  </defs>
+  {vapeur && (
+    <g class="vapeur" fill="none" stroke="#f4e9d6" stroke-width="3" stroke-linecap="round" opacity=".8">
+      <path d="M86 36C78 24 94 16 86 2" />
+      <path d="M101 38C93 24 109 14 101 0" />
+      <path d="M116 36C108 24 124 16 116 2" />
+    </g>
+  )}
+  <ellipse cx="100" cy="222" rx="74" ry="14" fill="#c42a1e" />
+  <ellipse cx="100" cy="219" rx="58" ry="8.5" fill="#141110" opacity=".5" />
+  <ellipse cx="100" cy="222" rx="74" ry="14" fill="none" stroke="#f4e9d6" stroke-width="2" stroke-dasharray="2 5" opacity=".55" />
+  <rect x="146" y="206" width="13" height="11" fill="#f4e9d6" transform="rotate(-8 152 212)" />
+  <g clip-path={`url(#${id}-v)`}>
+    <rect x="50" y="64" width="100" height="160" fill={`url(#${id}-t)`} />
+    <ellipse cx="100" cy="64" rx="38" ry="3.5" fill="#f3c46a" opacity=".9" />
+  </g>
+  <path d={verre} fill="none" stroke="#f4e9d6" stroke-width="2.5" stroke-linejoin="round" />
+  <ellipse cx="100" cy="46" rx="36" ry="4" fill="none" stroke="#f4e9d6" stroke-width="2.5" />
+  <path d="M73 60C76 92 90 108 90 128" fill="none" stroke="#f4e9d6" stroke-width="3" stroke-linecap="round" opacity=".45" />
+  <path d="M79 178C78 192 82 202 90 207" fill="none" stroke="#f4e9d6" stroke-width="3" stroke-linecap="round" opacity=".4" />
+</svg>

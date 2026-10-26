@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+@import '@fontsource/archivo-black/400.css';
+@import '@fontsource-variable/archivo';
+
+@theme {
+  --color-charbon: #141110;
+  --color-panneau: #221c19;
+  --color-braise: #2e2622;
+  --color-ambre: #e0a23a;
+  --color-piment: #c42a1e;
+  --color-piment-texte: #e05a4a; /* rouge lisible sur charbon (5,1:1) */
+  --color-creme: #f4e9d6;
+  --color-cendre: #b8aa95; /* texte secondaire sur charbon (8,2:1) */
+  --font-enseigne: 'Archivo Black', 'Arial Black', Impact, sans-serif;
+  --font-texte: 'Archivo Variable', 'Segoe UI', Arial, sans-serif;
+}
+
+@layer base {
+  html { color-scheme: dark; background: var(--color-charbon); color: var(--color-creme); -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; touch-action: manipulation; -webkit-tap-highlight-color: rgb(224 162 58 / .25); }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  body { font-family: var(--font-texte); font-size: 1.0625rem; line-height: 1.6; overflow-x: clip; font-variation-settings: 'wdth' 100; }
+  h1, h2, h3 { font-family: var(--font-enseigne); font-weight: 400; line-height: .95; letter-spacing: -0.01em; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--color-ambre); outline-offset: 3px; }
+  ::selection { background: var(--color-ambre); color: var(--color-charbon); }
+}
+
+@layer components {
+  .wrap { width: 100%; max-width: 78rem; margin-inline: auto; padding-inline: 1.25rem; }
+  @media (min-width: 768px) { .wrap { padding-inline: 2.25rem; } }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 50px; padding: .75rem 1.35rem; font-family: var(--font-enseigne); font-size: 1rem; letter-spacing: .01em; border: 2px solid transparent; text-decoration: none; transition: background-color .15s, color .15s, border-color .15s, transform .15s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-ambre { background: var(--color-ambre); color: var(--color-charbon); }
+  .btn-ambre:hover { background: #ecb558; }
+  .btn-piment { background: var(--color-piment); color: #fff; }
+  .btn-piment:hover { background: #a92218; }
+  .btn-ligne { border-color: var(--color-creme); color: var(--color-creme); }
+  .btn-ligne:hover { background: var(--color-creme); color: var(--color-charbon); }
+
+  /* Titre de section façon enseigne : capitales serrées */
+  .titre { font-size: clamp(2.4rem, 7vw, 4.6rem); text-transform: uppercase; }
+
+  /* Marqueur des infos à confirmer : visible, lisible sur charbon */
+  .ac { display: inline; background: #3a2c10; color: #f3c46a; border: 1px dashed #b07e26; font-family: var(--font-texte); font-size: .8em; font-weight: 650; letter-spacing: 0; text-transform: none; padding: 0 .35em; -webkit-box-decoration-break: clone; box-decoration-break: clone; overflow-wrap: anywhere; white-space: normal; }
+
+  /* Frise ottomane : étoile à huit branches, dessin original, en filigrane */
+  .frise { height: 28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'%3E%3Cg fill='none' stroke='%23e0a23a' stroke-width='1.2'%3E%3Crect x='18' y='4' width='20' height='20'/%3E%3Crect x='18' y='4' width='20' height='20' transform='rotate(45 28 14)'/%3E%3Ccircle cx='28' cy='14' r='3.2'/%3E%3Cpath d='M0 14h13.9M42.1 14H56'/%3E%3Cpath d='M0 0l7 7M56 0l-7 7M0 28l7-7M56 28l-7-7'/%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat-x; background-position: center; opacity: .28; }
+
+  /* Emplacement photo : aplat braise + légende du cliché attendu */
+  .photo-vide { position: relative; display: grid; place-items: end start; background-color: var(--color-braise); background-image: radial-gradient(circle at 1px 1px, rgb(224 162 58 / .14) 1px, transparent 0); background-size: 18px 18px; border: 1px solid #3d332d; }
+  .photo-vide figcaption { margin: .75rem; max-width: 88%; background: var(--color-charbon); border-left: 3px solid var(--color-ambre); padding: .5rem .7rem; font-size: .85rem; line-height: 1.4; color: var(--color-creme); }
+  .photo-vide figcaption b { display: block; color: var(--color-ambre); font-weight: 650; }
+}
+
+/* Vapeur du çay : le seul mouvement automatique du site */
+@media (prefers-reduced-motion: no-preference) {
+  .vapeur path { transform-box: fill-box; stroke-dasharray: 60 120; animation: vapeur 4.2s ease-in-out infinite; }
+  .vapeur path:nth-child(2) { animation-delay: 1.3s; }
+  .vapeur path:nth-child(3) { animation-delay: 2.6s; }
+  @keyframes vapeur {
+    0% { stroke-dashoffset: 60; opacity: 0; transform: translateY(6px); }
+    30% { opacity: .75; }
+    100% { stroke-dashoffset: -110; opacity: 0; transform: translateY(-10px); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

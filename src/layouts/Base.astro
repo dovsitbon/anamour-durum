@@ -1,0 +1,128 @@
+---
+import '../styles/global.css';
+import Entete from '../components/Entete.astro';
+import Pied from '../components/Pied.astro';
+import BarreMobile from '../components/BarreMobile.astro';
+import { SITE, HORAIRES } from '../data/site';
+import policeEnseigne from '@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonld?: object[];
+  noindex?: boolean;
+}
+const { title, description, jsonld = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = new URL('/og.png', Astro.site);
+const JOURS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+// Regroupe les jours qui ont les mêmes créneaux.
+const creneaux = new Map<string, string[]>();
+for (const h of HORAIRES) {
+  const k = `${h.ouvre}-${h.ferme}`;
+  creneaux.set(k, [...(creneaux.get(k) ?? []), JOURS_EN[h.jour]]);
+}
+
+const restaurant = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  '@id': new URL('/#restaurant', Astro.site).href,
+  name: SITE.nomComplet,
+  alternateName: SITE.nom,
+  url: new URL('/', Astro.site).href,
+  telephone: SITE.telLien,
+  image: og.href,
+  servesCuisine: ['Turkish', 'Kebab'],
+  hasMenu: new URL('/#carte', Astro.site).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.adresse.rue,
+    postalCode: SITE.adresse.cp,
+    addressLocality: SITE.adresse.ville,
+    addressRegion: "Val-d'Oise",
+    addressCountry: SITE.adresse.pays,
+  },
+  areaServed: [SITE.adresse.ville, ...SITE.voisines].map((n) => ({ '@type': 'City', name: n })),
+  openingHoursSpecification: [...creneaux].map(([k, jours]) => {
+    const [opens, closes] = k.split('-');
+    return { '@type': 'OpeningHoursSpecification', dayOfWeek: jours, opens, closes };
+  }),
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: SITE.noteNum, bestRating: 5, reviewCount: SITE.nbAvis },
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Parking gratuit', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Adapté aux enfants', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Sur place', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'À emporter', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Traiteur', value: true },
+  ],
+  paymentAccepted: 'Carte bancaire',
+  sameAs: [SITE.instagram],
+};
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={policeEnseigne} as="font" type="font/woff2" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#141110" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Anamour Durum Saint-Brice" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Anamour Durum, dürüm, grillades et lahmacun à Saint-Brice-sous-Forêt" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(restaurant)} />
+    {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-ambre focus:text-charbon focus:px-4 focus:py-3 focus:font-semibold">Aller au contenu</a>
+    <Entete />
+    <main id="contenu" class="flex-1">
+      <slot />
+    </main>
+    <Pied />
+    <BarreMobile />
+    <script is:inline define:vars={{ horaires: HORAIRES }}>
+      (function () {
+        try {
+          var parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+          var get = function (t) { return (parts.find(function (p) { return p.type === t; }) || {}).value; };
+          var j = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[get('weekday')];
+          var min = parseInt(get('hour'), 10) * 60 + parseInt(get('minute'), 10);
+          var toMin = function (h) { var a = h.split(':'); return +a[0] * 60 + +a[1]; };
+          var fmt = function (h) { return h.replace(':00', 'h').replace(':', 'h'); };
+          var du = function (d) { return horaires.filter(function (h) { return h.jour === d; }).sort(function (a, b) { return toMin(a.ouvre) - toMin(b.ouvre); }); };
+          var auj = du(j);
+          var enCours = auj.find(function (h) { return min >= toMin(h.ouvre) && min < toMin(h.ferme); });
+          var prochain = auj.find(function (h) { return min < toMin(h.ouvre); });
+          var texte;
+          if (enCours) texte = 'Ouvert maintenant, jusqu’à ' + fmt(enCours.ferme);
+          else if (prochain) texte = 'Fermé pour le moment, ouvre à ' + fmt(prochain.ouvre);
+          else {
+            for (var k = 1; k <= 7; k++) { var d = du((j + k) % 7); if (d.length) { texte = 'Fermé, ouvre ' + (k === 1 ? 'demain' : d[0].nom.toLowerCase()) + ' à ' + fmt(d[0].ouvre); break; } }
+          }
+          document.querySelectorAll('[data-statut]').forEach(function (el) {
+            el.dataset.ouvert = enCours ? 'oui' : 'non';
+            var t = el.querySelector('[data-statut-texte]');
+            if (t && texte) t.textContent = texte;
+          });
+          document.querySelectorAll('[data-jour="' + j + '"]').forEach(function (el) { el.setAttribute('aria-current', 'date'); });
+        } catch (e) {}
+      })();
+    </script>
+  </body>
+</html>

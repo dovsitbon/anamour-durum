@@ -1,0 +1,13 @@
+---
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<p class={`statut inline-flex items-center gap-2.5 text-[.98rem] font-semibold ${cls}`} data-statut aria-live="polite">
+  <span class="pastille" aria-hidden="true"></span>
+  <span data-statut-texte>Tous les jours, 11h – 22h30</span>
+</p>
+<style>
+  .pastille { width: .7rem; height: .7rem; border-radius: 50%; background: var(--color-cendre); box-shadow: 0 0 0 3px rgb(184 170 149 / .2); flex: none; }
+  [data-ouvert='oui'] .pastille { background: #6fcf7a; box-shadow: 0 0 0 3px rgb(111 207 122 / .22); }
+  [data-ouvert='non'] .pastille { background: var(--color-piment-texte); box-shadow: 0 0 0 3px rgb(224 90 74 / .22); }
+</style>

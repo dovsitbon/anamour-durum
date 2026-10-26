@@ -1,0 +1,26 @@
+---
+import Logo from './Logo.astro';
+import { SITE } from '../data/site';
+const liens = [
+  ['/#carte', 'La carte'],
+  ['/#borne', 'La borne'],
+  ['/#salle', 'La salle'],
+  ['/#infos', 'Horaires et accès'],
+];
+---
+<header class="sticky top-0 z-40 bg-charbon border-b border-[#3d332d]">
+  <div class="wrap flex items-center justify-between gap-4 h-[4.25rem]">
+    <Logo id="cay-entete" />
+    <nav aria-label="Navigation principale" class="hidden lg:block">
+      <ul class="flex gap-1">
+        {liens.map(([href, txt]) => (
+          <li><a href={href} class="inline-flex items-center min-h-11 px-3 font-semibold no-underline hover:text-ambre transition-colors">{txt}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/#carte" class="btn btn-ligne !min-h-11 !px-3.5 !text-[.9rem] lg:hidden">La carte</a>
+      <a href={`tel:${SITE.telLien}`} class="btn btn-piment !min-h-11 !px-3.5 !text-[.9rem] hidden md:inline-flex">Appeler {SITE.telAffiche}</a>
+    </div>
+  </div>
+</header>

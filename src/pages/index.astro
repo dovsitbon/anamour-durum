@@ -1,0 +1,262 @@
+---
+import Base from '../layouts/Base.astro';
+import Cay from '../components/Cay.astro';
+import Statut from '../components/Statut.astro';
+import CarteFacade from '../components/CarteFacade.astro';
+import { SITE, HORAIRES, AVIS, fmtHeure } from '../data/site';
+import carte from '../data/carte.json';
+
+type Plat = { nom: string; detail: string | null; prix: string | null; prixAConfirmer?: boolean; phare?: boolean };
+const rubriques = carte.rubriques as { id: string; titre: string; sous: string; plats: Plat[] }[];
+const h = HORAIRES[0];
+const ordreJours = [1, 2, 3, 4, 5, 6, 0].map((j) => HORAIRES.find((x) => x.jour === j)!);
+
+const menu = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  '@id': new URL('/#carte', Astro.site).href,
+  name: 'Carte Anamour Durum',
+  inLanguage: 'fr',
+  hasMenuSection: rubriques.map((r) => ({
+    '@type': 'MenuSection',
+    name: r.titre,
+    hasMenuItem: r.plats.map((p) => ({ '@type': 'MenuItem', name: p.nom, ...(p.detail ? { description: p.detail } : {}) })),
+  })),
+};
+---
+<Base
+  title="Anamour Durum Saint-Brice | Dürüm, grillades et lahmacun 7j/7"
+  description="Kebab, dürüm, grillades et lahmacun à Saint-Brice-sous-Forêt (95). Commande à la borne, service à table, thé turc offert. Ouvert 7j/7, 11h–22h30."
+  jsonld={[menu]}
+>
+  <!-- HERO : l'enseigne -->
+  <section class="relative overflow-hidden" aria-labelledby="titre-accueil">
+    <div class="wrap grid lg:grid-cols-[1.3fr_1fr] gap-6 lg:gap-6 items-center pt-8 pb-12 md:pt-14 md:pb-20 lg:min-h-[calc(100dvh-4.25rem)]">
+      <div class="relative z-10 min-w-0">
+        <p class="text-cendre font-semibold text-[.98rem] mb-6 max-w-[40ch]">Nouvelle adresse turque, 12 avenue Robert Schuman, à Saint-Brice-sous-Forêt.</p>
+        <h1 id="titre-accueil" class="enseigne uppercase">
+          <span class="block">Dürüm,</span>
+          <span class="block">grillades</span>
+          <span class="block">et lahmacun,</span>
+          <span class="bande">7 jours sur 7</span>
+        </h1>
+        <p class="mt-7 text-[1.12rem] max-w-[44ch]">Vous commandez à la borne, vous vous installez, on vous sert à table. Le thé turc arrive avec, offert.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#carte" class="btn btn-ambre">Voir la carte</a>
+          <a href={`tel:${SITE.telLien}`} class="btn btn-piment">Appeler<span class="hidden sm:inline">&nbsp;{SITE.telAffiche}</span></a>
+        </div>
+        <div class="mt-8 flex flex-wrap items-center gap-x-7 gap-y-3">
+          <p class="flex items-baseline gap-2"><span class="font-enseigne text-ambre text-[1.9rem] leading-none">{SITE.note}/5</span><a href="#avis" class="text-cendre underline underline-offset-4 decoration-[#7a6a58] hover:text-creme">{SITE.nbAvis} avis Google</a></p>
+          <Statut />
+        </div>
+      </div>
+      <div class="relative min-w-0 flex lg:justify-end -mt-4 lg:mt-0">
+        <span class="numero font-enseigne hidden lg:block" aria-hidden="true">12</span>
+        <figure class="relative z-10 flex flex-row lg:flex-col items-center gap-4 lg:gap-0">
+          <Cay class="w-[92px] sm:w-[120px] lg:w-[300px] h-auto shrink-0" id="cay-hero" titre="Verre de thé turc en forme de tulipe sur sa soucoupe rouge" />
+          <figcaption class="lg:mt-3 font-enseigne uppercase text-[1.05rem] lg:text-center leading-tight">Le thé est offert<span class="block font-texte normal-case font-medium text-cendre text-[.92rem] mt-1">servi à table, en verre tulipe</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="frise" aria-hidden="true"></div>
+
+  <!-- LA BORNE EN 3 ÉTAPES -->
+  <section id="borne" class="bg-panneau py-16 md:py-24" aria-labelledby="titre-borne">
+    <div class="wrap">
+      <div class="grid md:grid-cols-[1fr_1.3fr] gap-6 md:gap-12 items-end">
+        <h2 id="titre-borne" class="titre">Borne, table, thé.</h2>
+        <p class="text-[1.1rem] max-w-[46ch] md:pb-2">Ici, la commande se passe sur la borne. Ensuite, l’équipe s’occupe du reste, jusqu’à votre table.</p>
+      </div>
+      <ol class="etapes mt-12 md:mt-16 grid md:grid-cols-3 gap-10 md:gap-8">
+        <li>
+          <span class="chiffre" aria-hidden="true">1</span>
+          <svg class="schema" viewBox="0 0 120 90" aria-hidden="true"><g fill="none" stroke="#e0a23a" stroke-width="2.5" stroke-linejoin="round"><rect x="38" y="6" width="44" height="72" /><rect x="44" y="13" width="32" height="34" /><path d="M50 22h20M50 30h14M50 38h18" stroke-width="2" /><rect x="50" y="56" width="20" height="5" /><path d="M54 61v14h12V61" stroke="#f4e9d6" /><path d="M32 84h56" /></g></svg>
+          <h3>Je commande à la borne</h3>
+          <p>Dürüm, assiette, mix grillades, sauces : tout se choisit à l’écran, sur place comme à emporter.</p>
+        </li>
+        <li>
+          <span class="chiffre" aria-hidden="true">2</span>
+          <svg class="schema" viewBox="0 0 120 90" aria-hidden="true"><g fill="none" stroke="#e0a23a" stroke-width="2.5" stroke-linejoin="round"><rect x="34" y="26" width="52" height="38" /><rect x="44" y="10" width="14" height="10" /><rect x="62" y="10" width="14" height="10" /><rect x="44" y="70" width="14" height="10" /><rect x="62" y="70" width="14" height="10" /><rect x="52" y="38" width="16" height="14" stroke="#f4e9d6" stroke-width="2" /></g></svg>
+          <h3>Je m’installe</h3>
+          <p>Je prends une table, seul, à deux ou en famille avec les enfants.</p>
+        </li>
+        <li>
+          <span class="chiffre" aria-hidden="true">3</span>
+          <svg class="schema" viewBox="0 0 120 90" aria-hidden="true"><g fill="none" stroke="#e0a23a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="48" cy="58" rx="34" ry="12" /><path d="M24 54l48-12" /><circle cx="36" cy="50" r="4" /><circle cx="48" cy="47" r="4" /><circle cx="60" cy="44" r="4" /><path d="M92 30c0 12 6 16 6 24 0 6-3 10-6 10s-6-4-6-10c0-8 6-12 6-24z" stroke="#f4e9d6" transform="translate(4 0)" /><path d="M84 30h20" stroke="#f4e9d6" /><path d="M84 72h24" /></g></svg>
+          <h3>On me sert à table</h3>
+          <p>Les plats arrivent à ma table, avec le thé turc offert. Un doute sur la composition d’un mix ? Je le signale tout de suite à l’équipe.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- LA CARTE -->
+  <section id="carte" class="py-16 md:py-24" aria-labelledby="titre-carte">
+    <div class="wrap">
+      <div class="grid md:grid-cols-[1fr_1.3fr] gap-6 md:gap-12 items-end">
+        <h2 id="titre-carte" class="titre">La carte</h2>
+        <p class="text-[1.05rem] max-w-[50ch] md:pb-2 text-cendre">Les prix exacts sont affichés sur la borne. Ceux de cette page sont en cours de vérification avec le restaurant.</p>
+      </div>
+
+      <div class="panneaux mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {rubriques.map((r) => (
+          <article class:list={['panneau', { 'panneau-phare': r.id === 'grillades' }]} id={`carte-${r.id}`} aria-labelledby={`t-${r.id}`}>
+            <h3 id={`t-${r.id}`}>{r.titre}</h3>
+            <p class="sous">{r.sous}</p>
+            <ul>
+              {r.plats.map((p) => (
+                <li class:list={{ phare: p.phare }}>
+                  <div class="ligne">
+                    <span class="nom">{p.nom}</span>
+                    <span class="points" aria-hidden="true"></span>
+                    <span class="prix">{p.prix ?? <span class="ac">[À CONFIRMER]</span>}</span>
+                  </div>
+                  {p.detail && <p class="detail">{p.detail}</p>}
+                  {p.prixAConfirmer && <p class="detail">Prix relevé sur Uber Eats <span class="ac">[À CONFIRMER]</span></p>}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-3 text-[.98rem]">
+        <p class="border-t-2 border-ambre pt-4"><b class="block font-enseigne uppercase text-[1.05rem] mb-1">Sur place ou à emporter</b>Même carte, même borne. Le restaurant propose aussi un service traiteur <span class="ac">[À CONFIRMER : conditions]</span>.</p>
+        <p class="border-t-2 border-ambre pt-4"><b class="block font-enseigne uppercase text-[1.05rem] mb-1">Aussi en livraison</b>Anamour Durum est présent sur Uber Eats <span class="ac">[À CONFIRMER : lien]</span>. À emporter, le plus simple reste de passer directement à la borne.</p>
+        <p class="border-t-2 border-ambre pt-4"><b class="block font-enseigne uppercase text-[1.05rem] mb-1">Halal</b>Présentée comme « nouvelle adresse halal » par le créateur Le_U92. Certification et fournisseur <span class="ac">[À CONFIRMER]</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LA SALLE -->
+  <section id="salle" class="bg-panneau py-16 md:py-24" aria-labelledby="titre-salle">
+    <div class="wrap grid lg:grid-cols-[1fr_1.45fr] gap-10 lg:gap-14 items-start">
+      <div>
+        <h2 id="titre-salle" class="titre">La salle</h2>
+        <p class="mt-6 text-[1.1rem] max-w-[42ch]">Un décor soigné, une équipe souriante, et des toilettes que les clients citent dans leurs avis tant elles sont propres.</p>
+        <ul class="services mt-8">
+          <li>Familles et enfants bienvenus</li>
+          <li>Sur place, à emporter, traiteur</li>
+          <li>Parking gratuit</li>
+          <li>Carte bancaire</li>
+        </ul>
+      </div>
+      <div class="grid grid-cols-2 gap-3 md:gap-4">
+        <figure class="photo-vide col-span-2 aspect-[16/9]"><figcaption><b>Photo à prendre</b>La salle vue depuis l’entrée, en soirée, lumières allumées</figcaption></figure>
+        <figure class="photo-vide aspect-[4/5]"><figcaption><b>Photo à prendre</b>La broche de kebab en cuisson, de près</figcaption></figure>
+        <figure class="photo-vide aspect-[4/5]"><figcaption><b>Photo à prendre</b>Un verre de thé posé sur une table dressée</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- VU SUR LES RÉSEAUX -->
+  <section class="py-16 md:py-24" aria-labelledby="titre-reseaux">
+    <div class="wrap grid md:grid-cols-2 gap-10 md:gap-14 items-start">
+      <div>
+        <h2 id="titre-reseaux" class="titre">Vu sur TikTok</h2>
+        <p class="mt-6 text-[1.1rem] max-w-[44ch]">Le créateur <a href={SITE.tiktokCreateur} target="_blank" rel="noopener" class="underline underline-offset-4 decoration-ambre">@le_u92</a> a présenté Anamour Durum comme une « nouvelle adresse halal » à Saint-Brice. Sa vidéo a dépassé les 100 000 vues sur TikTok.</p>
+        <p class="mt-3 text-cendre text-[.95rem]">Lien direct vers la vidéo <span class="ac">[À CONFIRMER]</span></p>
+      </div>
+      <a href={SITE.instagram} target="_blank" rel="noopener" class="insta group block border-2 border-ambre p-6 md:p-8 no-underline hover:bg-ambre hover:text-charbon transition-colors">
+        <span class="block text-cendre group-hover:text-charbon font-semibold">La broche, les assiettes, la salle : en images sur Instagram</span>
+        <span class="block font-enseigne text-[clamp(1.2rem,5.2vw,1.9rem)] leading-tight mt-3">@anamour_durum<wbr />_saintbrice</span>
+        <span class="inline-flex items-center gap-2 mt-5 font-enseigne uppercase text-[.95rem]">Suivre sur Instagram</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- AVIS -->
+  <section id="avis" class="bg-panneau py-16 md:py-24" aria-labelledby="titre-avis">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end gap-x-10 gap-y-4">
+        <h2 id="titre-avis" class="titre">Ce qu’ils en disent</h2>
+        <p class="flex items-baseline gap-3"><span class="font-enseigne text-ambre text-[clamp(3rem,9vw,5.5rem)] leading-none">{SITE.note}</span><span class="text-[1.05rem]">sur 5<br /><span class="text-cendre">{SITE.nbAvis} avis Google</span></span></p>
+      </div>
+      <div class="avis mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">
+        {AVIS.map((a, i) => (
+          <figure class:list={['citation', { grande: i === 0 }]}>
+            <blockquote><p>« {a} »</p></blockquote>
+            <figcaption>Avis Google</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- INFOS PRATIQUES -->
+  <section id="infos" class="py-16 md:py-24" aria-labelledby="titre-infos">
+    <div class="wrap grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-14">
+      <div>
+        <h2 id="titre-infos" class="titre">Horaires et accès</h2>
+        <p class="mt-6 font-enseigne uppercase text-ambre text-[clamp(1.6rem,5vw,2.4rem)] leading-tight">Tous les jours<br />{fmtHeure(h.ouvre)} – {fmtHeure(h.ferme)}</p>
+        <Statut class="mt-4" />
+        <table class="horaires mt-6 w-full max-w-md text-[.98rem]">
+          <caption class="sr-only">Horaires d’ouverture d’Anamour Durum</caption>
+          <tbody>
+            {ordreJours.map((j) => (
+              <tr data-jour={j.jour}><th scope="row">{j.nom}</th><td>{fmtHeure(j.ouvre)} – {fmtHeure(j.ferme)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <div class="mt-8 space-y-4 max-w-[46ch]">
+          <p><b class="font-semibold">Adresse</b><br />{SITE.adresse.rue}, {SITE.adresse.cp} {SITE.adresse.ville}. Dans la zone commerciale, près du magasin Smyths Toys.</p>
+          <p><b class="font-semibold">Parking</b><br />Gratuit, sur place.</p>
+          <p><b class="font-semibold">Téléphone</b><br /><a href={`tel:${SITE.telLien}`} class="inline-flex min-h-11 items-center underline underline-offset-4 decoration-ambre">{SITE.telAffiche}</a></p>
+          <p class="text-cendre text-[.95rem]">On vient de Saint-Brice, mais aussi de Groslay, Montmorency, Sarcelles, Deuil-la-Barre, Montmagny, Domont et Ézanville.</p>
+        </div>
+      </div>
+      <div class="min-w-0">
+        <CarteFacade />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .enseigne { font-size: clamp(2.55rem, 10.4vw, 6.6rem); line-height: .9; letter-spacing: -.015em; }
+  .enseigne .bande { display: inline-block; margin-top: .22em; background: var(--color-ambre); color: var(--color-charbon); font-size: .62em; padding: .14em .3em .1em; line-height: 1; }
+  .numero { position: absolute; right: 50%; top: 50%; transform: translate(50%, -55%); font-size: clamp(14rem, 52vw, 30rem); line-height: .8; color: transparent; -webkit-text-stroke: 2px #3a302a; letter-spacing: -.05em; user-select: none; }
+
+  .etapes li { position: relative; }
+  .chiffre { display: block; font-family: var(--font-enseigne); font-size: clamp(5rem, 14vw, 8rem); line-height: .8; color: var(--color-ambre); }
+  .schema { width: 120px; height: 90px; margin-top: 1.25rem; }
+  .etapes h3 { margin-top: 1rem; font-size: 1.45rem; text-transform: uppercase; line-height: 1; }
+  .etapes p { margin-top: .6rem; max-width: 36ch; }
+  @media (min-width: 768px) {
+    .etapes li + li::before { content: ''; position: absolute; left: -1rem; top: .2rem; bottom: 0; border-left: 1px dashed #5a4a3a; }
+  }
+
+  .panneau { background: var(--color-panneau); border-top: 4px solid var(--color-ambre); padding: 1.4rem 1.25rem 1.5rem; }
+  @media (min-width: 768px) { .panneau { padding: 1.6rem 1.6rem 1.75rem; } }
+  .panneau-phare { background: #2a201b; border-top-color: var(--color-piment); }
+  @media (min-width: 768px) { .panneau-phare { grid-column: span 2; } }
+  @media (min-width: 1280px) { .panneau-phare { grid-row: span 2; grid-column: span 1; } }
+  .panneau h3 { font-size: 1.75rem; text-transform: uppercase; }
+  .panneau .sous { margin-top: .5rem; color: var(--color-cendre); font-size: .95rem; }
+  .panneau ul { margin-top: 1.1rem; display: grid; gap: .85rem; }
+  .ligne { display: flex; align-items: baseline; gap: .5rem; }
+  .nom { font-weight: 650; }
+  .points { flex: 1; min-width: 1rem; border-bottom: 2px dotted #5a4a3a; transform: translateY(-.25em); }
+  .prix { font-family: var(--font-enseigne); color: var(--color-ambre); white-space: nowrap; text-align: right; }
+  .prix .ac { white-space: nowrap; font-size: .7rem; }
+  .detail { margin-top: .15rem; font-size: .9rem; color: var(--color-cendre); }
+  .phare .nom { font-family: var(--font-enseigne); font-size: 1.35rem; text-transform: uppercase; }
+  .phare .prix { font-size: 1.6rem; }
+  .phare .detail:first-of-type { color: var(--color-creme); font-size: 1rem; }
+
+  .services { display: grid; gap: .1rem; }
+  .services li { padding: .7rem 0; border-bottom: 1px solid #3d332d; font-weight: 600; }
+  .services li::before { content: ''; display: inline-block; width: .55rem; height: .55rem; margin-right: .8rem; background: var(--color-ambre); transform: rotate(45deg) translateY(-2px); }
+
+  .citation blockquote p { font-size: 1.15rem; line-height: 1.5; max-width: 52ch; }
+  .citation.grande { grid-column: 1 / -1; }
+  .citation.grande blockquote p { font-family: var(--font-enseigne); font-size: clamp(1.4rem, 3.4vw, 2.3rem); line-height: 1.15; max-width: 34ch; }
+  .citation figcaption { margin-top: .8rem; color: var(--color-ambre); font-weight: 650; font-size: .92rem; }
+  .citation:not(.grande) { border-left: 3px solid #3d332d; padding-left: 1.25rem; }
+
+  .horaires th, .horaires td { padding: .5rem 0; border-bottom: 1px solid #3d332d; text-align: left; font-weight: 500; }
+  .horaires td { text-align: right; font-variant-numeric: tabular-nums; }
+  .horaires tr[aria-current='date'] th, .horaires tr[aria-current='date'] td { color: var(--color-ambre); font-weight: 700; }
+</style>

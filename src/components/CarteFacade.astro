@@ -1,0 +1,36 @@
+---
+import { SITE } from '../data/site';
+---
+<div class="relative w-full min-w-0 aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden border border-[#3d332d] bg-panneau" data-carte>
+  <svg class="absolute inset-0 w-full h-full" viewBox="50 0 300 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="400" height="300" fill="#1c1715" />
+    <path d="M-20 205 L 420 120" stroke="#2e2622" stroke-width="26" />
+    <path d="M-20 205 L 420 120" stroke="#5a4a3a" stroke-width="1.5" stroke-dasharray="12 10" />
+    <path d="M150 -10 L 205 310" stroke="#2e2622" stroke-width="12" />
+    <path d="M300 -10 C 290 80, 330 200, 360 310" stroke="#2e2622" stroke-width="9" fill="none" />
+    <rect x="232" y="56" width="70" height="44" fill="none" stroke="#3d332d" stroke-width="1.5" />
+    <rect x="70" y="214" width="60" height="40" fill="none" stroke="#3d332d" stroke-width="1.5" />
+    <text x="150" y="160" font-family="Archivo Variable, sans-serif" font-size="12" fill="#b8aa95" transform="rotate(-11 150 160)">av. Robert Schuman</text>
+    <circle cx="118" cy="160" r="15" fill="#e0a23a" /><circle cx="118" cy="160" r="5.5" fill="#141110" />
+  </svg>
+  <p class="absolute left-3 top-3 right-3 sm:right-auto bg-charbon px-3 py-1.5 text-[.88rem] border-l-[3px] border-ambre">{SITE.adresse.rue}, {SITE.adresse.cp} {SITE.adresse.ville}</p>
+  <div class="absolute left-3 right-3 bottom-3 flex flex-wrap gap-2">
+    <button type="button" class="btn btn-ambre cursor-pointer" data-charger-carte>Afficher la carte Google</button>
+    <a href={SITE.itineraire} class="btn btn-ligne bg-charbon" target="_blank" rel="noopener">Itinéraire</a>
+  </div>
+</div>
+<script>
+  import { SITE } from '../data/site';
+  document.querySelectorAll<HTMLElement>('[data-carte]').forEach((box) => {
+    box.querySelector('[data-charger-carte]')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = SITE.carte;
+      f.title = 'Carte Google : Anamour Durum, 12 avenue Robert Schuman, Saint-Brice-sous-Forêt';
+      f.loading = 'lazy';
+      f.referrerPolicy = 'no-referrer-when-downgrade';
+      f.className = 'absolute inset-0 w-full h-full border-0';
+      box.replaceChildren(f);
+      f.focus();
+    });
+  });
+</script>

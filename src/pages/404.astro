@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Cay from '../components/Cay.astro';
+import { SITE } from '../data/site';
+---
+<Base title="Page introuvable | Anamour Durum Saint-Brice" description="Cette page n'existe pas. Retrouvez la carte, les horaires et l'adresse d'Anamour Durum à Saint-Brice-sous-Forêt." noindex>
+  <section class="wrap py-16 md:py-24 grid md:grid-cols-[1.4fr_1fr] gap-10 items-center">
+    <div>
+      <h1 class="titre">Cette page n’existe pas</h1>
+      <p class="mt-6 text-[1.1rem] max-w-[44ch]">L’adresse a peut-être changé. La carte, les horaires et l’accès sont sur la page d’accueil.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/" class="btn btn-ambre">Retour à l’accueil</a>
+        <a href="/#carte" class="btn btn-ligne">Voir la carte</a>
+        <a href={`tel:${SITE.telLien}`} class="btn btn-piment">Appeler {SITE.telAffiche}</a>
+      </div>
+    </div>
+    <Cay class="w-40 md:w-56 h-auto mx-auto" id="cay-404" />
+  </section>
+</Base>

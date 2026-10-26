@@ -1,0 +1,26 @@
+---
+import Logo from './Logo.astro';
+import { SITE, HORAIRES, fmtHeure } from '../data/site';
+const h = HORAIRES[0];
+---
+<footer class="border-t border-[#3d332d] bg-[#0f0d0c] pb-24 md:pb-0">
+  <div class="frise" aria-hidden="true"></div>
+  <div class="wrap py-12 grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
+    <div>
+      <Logo id="cay-pied" />
+      <p class="mt-4 text-cendre max-w-[34ch]">Dürüm, kebab, grillades et lahmacun à Saint-Brice-sous-Forêt. Commande à la borne, service à table.</p>
+    </div>
+    <address class="not-italic leading-relaxed">
+      <p class="font-semibold">{SITE.nomComplet}</p>
+      <p>{SITE.adresse.rue}<br />{SITE.adresse.cp} {SITE.adresse.ville}</p>
+      <p class="mt-1"><a href={`tel:${SITE.telLien}`} class="inline-flex min-h-11 items-center underline underline-offset-4 decoration-ambre">{SITE.telAffiche}</a></p>
+      <p class="text-cendre">Tous les jours, {fmtHeure(h.ouvre)} – {fmtHeure(h.ferme)}</p>
+    </address>
+    <ul>
+      <li><a href={SITE.instagram} target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline underline-offset-4 decoration-ambre">Instagram {SITE.instagramPseudo}</a></li>
+      <li><a href="/mentions-legales/" class="inline-flex min-h-11 items-center underline underline-offset-4 decoration-[#7a6a58]">Mentions légales</a></li>
+      <li><a href="/confidentialite/" class="inline-flex min-h-11 items-center underline underline-offset-4 decoration-[#7a6a58]">Confidentialité</a></li>
+    </ul>
+  </div>
+  <p class="wrap pb-8 text-[.88rem] text-cendre">Carte bancaire acceptée. Parking gratuit sur place.</p>
+</footer>

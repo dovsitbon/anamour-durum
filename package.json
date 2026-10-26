@@ -1,0 +1,24 @@
+{
+  "name": "anamour-durum",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --port 4414",
+    "build": "astro build",
+    "preview": "astro preview --port 4414",
+    "captures": "node scripts/captures.mjs",
+    "og": "node scripts/og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/archivo-black": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
+}
